@@ -1,0 +1,228 @@
+WITH ITEMS AS
+
+(
+  SELECT
+      A.SIT_SITE_ID
+    , A.ITE_ITEM_ID
+    , A.ITE_CNS_CONCESIONARIO
+    , CAT.CAT_CATEG_NAME_L1
+    , CAT.CAT_CATEG_NAME_L2
+    , CAT.CAT_CATEG_NAME_L3
+    , CAT.CAT_CATEG_NAME_L4
+
+  FROM `meli-bi-data.WHOWNER.LK_ITE_ITEMS` AS A
+
+  -- LE AGREGO CATEGORY NAME
+  INNER JOIN `meli-bi-data.WHOWNER.AG_LK_CAT_CATEGORIES` AS CAT 
+	ON    CAT.CAT_CATEG_ID_L7 = CAST(A.CAT_CATEG_ID AS INTEGER)
+	AND CAT.SIT_SITE_ID = A.SIT_SITE_ID
+    AND CAT.CAT_CATEG_ID_L1 IN (1743,1459) -- REAL ESTATE Y MOTORS
+
+)
+
+, ga_sessions AS 
+(
+    --MLA
+    SELECT *
+    , 79568999 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `79568999.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    --MLB
+    SELECT *
+    , 79572943 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `79572943.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    -- MLU
+    SELECT *
+    , 79569884 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `79569884.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    -- MLC
+    SELECT *
+    , 79575411 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `79575411.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    -- PI
+    SELECT *
+    , 171108187 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `171108187.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    --TuCarro
+    SELECT *
+    , 79576307 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `79576307.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    --MCO
+    SELECT *
+    , 79576008 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `79576008.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    --MLM
+    SELECT *
+    , 79571586 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `79571586.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+    UNION ALL
+    --M3
+    SELECT *
+    , 108964616 AS dataset_id
+    , GENERATE_UUID() as id, _TABLE_SUFFIX as partition_date_string
+    FROM
+    `108964616.ga_sessions_*`
+    WHERE ((( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) ) >=
+    (TIMESTAMP('2022-01-01 00:00:00')) AND ( TIMESTAMP(PARSE_DATE('%Y%m%d', REGEXP_EXTRACT(_TABLE_SUFFIX,r'^\d\d\d\d\d\d\d\d'))) )
+    <= (TIMESTAMP('2022-01-02 00:00:00'))))
+)
+
+, ga_sessions_total_contacts AS
+(
+  SELECT
+      FORMAT_DATE("%m/%E4Y",PARSE_DATE('%Y%m%d',ga_sessions.date)) as Fecha
+    , FORMAT_DATE("%E4Y",PARSE_DATE('%Y%m%d',ga_sessions.date)) as Year
+    , FORMAT_DATE("%m",PARSE_DATE('%Y%m%d',ga_sessions.date)) as Mes
+
+    , (SELECT value FROM hits.customDimensions WHERE index= 49) AS ITE_ITEM_ID
+
+    , (CASE WHEN (ga_sessions.dataset_id = 79568999) THEN 'MLA'
+            WHEN (ga_sessions.dataset_id = 79572943) THEN 'MLB'
+            WHEN (ga_sessions.dataset_id = 79569884) THEN 'MLU'
+            WHEN (ga_sessions.dataset_id = 171108187 or ga_sessions.dataset_id = 79575411) THEN 'MLC'
+            WHEN (ga_sessions.dataset_id = 79576008 or ga_sessions.dataset_id = 79576307) THEN 'MCO'
+            WHEN (ga_sessions.dataset_id = 79571586 or ga_sessions.dataset_id = 108964616) THEN 'MLM' END) AS PAIS
+
+    , (CASE WHEN ga_sessions.dataset_id = 79568999 THEN 'MLA'
+            WHEN ga_sessions.dataset_id = 79572943 THEN 'MLB'
+            WHEN ga_sessions.dataset_id = 79569884 THEN 'MLU'
+            WHEN ga_sessions.dataset_id = 79575411 then 'MLC'
+            WHEN ga_sessions.dataset_id = 171108187 THEN 'PI'
+            WHEN ga_sessions.dataset_id = 79576307 THEN 'TuCarro'
+            WHEN ga_sessions.dataset_id = 79576008 THEN 'MCO'
+            WHEN ga_sessions.dataset_id = 79571586 THEN 'MLM'
+            WHEN ga_sessions.dataset_id = 108964616 THEN 'M3' END) AS Cuenta
+
+    , (CASE WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT') THEN 'MOTORS'
+            WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('REAL_ESTATE') THEN 'REAL ESTATE'
+            WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('SERVICES') THEN 'SERVICES' END) AS VERTICAL
+
+    , (CASE WHEN (ga_sessions.dataset_id = 79572943 and geoNetwork.region = 'State of Sao Paulo') THEN 'SP'
+            ELSE 'REST' END) AS Region
+
+    , (CASE
+        -- EMAIL
+            WHEN (   REGEXP_CONTAINS(upper(trafficSource.source),'.*PROMOTIONAL_EMAILS*') IS TRUE
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*EMAIL.*') IS TRUE
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*PUSH.*') IS TRUE
+                    )
+                THEN 'PUSH-EMAIL'
+        -- PAID VIS
+            WHEN REGEXP_CONTAINS(upper(trafficSource.source),'.*CREATIVECDN.COM.*') IS TRUE THEN 'PAID VIS' -- PARTNER POM VIS
+            WHEN (   REGEXP_CONTAINS(upper(trafficSource.medium),'.*DISP.*') IS TRUE  
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*CPC.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*CPA.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*DPA.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*MEDIA.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*RETARG.*') IS TRUE 
+                    )
+                AND 
+                (  REGEXP_CONTAINS(upper(trafficSource.campaign),".*CLASSI.*") IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.campaign),".*_VIS_.*") IS TRUE
+                    OR ga_sessions.dataset_id = 171108187   -- TABLA DE Portal Inmobiliario
+                    OR ga_sessions.dataset_id = 79576307    -- TABLA DE Tu Carro Colombia
+                    OR ga_sessions.dataset_id = 108964616   -- TABLA DE M3
+                    )
+                THEN 'PAID VIS'
+        -- PAID CORE
+            WHEN (   REGEXP_CONTAINS(upper(trafficSource.medium),'.*DISP.*') IS TRUE  
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*CPC.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*CPA.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*DPA.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*MEDIA.*') IS TRUE 
+                    OR REGEXP_CONTAINS(upper(trafficSource.medium),'.*RETARG.*') IS TRUE 
+                    )
+                THEN 'PAID CORE'
+            
+            WHEN REGEXP_CONTAINS(upper(trafficSource.source),'.*DIRECT.*') IS TRUE then 'DIRECT'
+            WHEN REGEXP_CONTAINS(upper(trafficSource.medium),'.*ORGANIC.*') IS TRUE then 'ORGANIC'
+            WHEN REGEXP_CONTAINS(upper(trafficSource.medium),'.*REFER.*') IS TRUE then 'REFERRAL'
+            WHEN REGEXP_CONTAINS(upper(trafficSource.medium),'.*NOTIFIC.*') IS TRUE then 'NOTIFICATIONS'
+            WHEN REGEXP_CONTAINS(upper(trafficSource.medium),'.*AFFILI.*') IS TRUE then 'AFFILIATE'
+            ELSE 'OTHER' END) AS MEDIUM
+
+    , COUNT(DISTINCT CASE WHEN (hits.type = 'EVENT') THEN (CONCAT(ga_sessions.id,'|',FORMAT('%05d',hits.hitNumber)))  ELSE NULL END) AS TotalContacts
+
+
+
+  FROM ga_sessions
+  , UNNEST(ga_sessions.hits) as hits
+
+  WHERE ((( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT','REAL_ESTATE','SERVICES')) AND upper(hits.eventInfo.eventAction) in ('CALL','CONTACT','CONTACT_WHATSAPP','QUOTATION'))
+
+  GROUP BY 1,2,3,4,5,6,7,8,9
+)
+
+SELECT 
+    A.Fecha
+  , A.Year
+  , A.Mes
+  , A.PAIS
+  , A.Cuenta
+  , A.VERTICAL
+  , A.Region
+  , A.MEDIUM
+  , (CASE WHEN CAT_CATEG_NAME_L4 IN ('Desarrollos Inmobiliarios','Emprendimientos','Lançamentos','Proyectos') THEN 'Desarrollos'
+          WHEN CAT_CATEG_NAME_L3 IN ('Arriendo Temporal','Temporada','Alquiler Temporal','Alquiler Temporada','Alquiler Temporario','Alquiler Vacacional','Renta Vacacional') THEN 'Alquiler temporal'
+          WHEN CAT_CATEG_NAME_L3 IN ('Venta','Venda') THEN 'Venta'
+          WHEN CAT_CATEG_NAME_L3 IN ('Alquiler','Traspaso','Aluguel','Renta','Arriendo') THEN 'Alquiler' 
+          ELSE 'No aplica' END) AS Operacion
+
+  -- METRICA CONTACTOS TOTALES
+  , SUM(TotalContacts)
+  , 'N/A' as Filler_Var
+
+FROM ga_sessions_total_contacts AS A
+
+-- JOIN CON ITEMS + CATEGORIAS
+LEFT JOIN ITEMS AS B
+ON A.ITE_ITEM_ID /*SITE_ID_ITEM_ID*/ = CONCAT(B.SIT_SITE_ID,B.ITE_ITEM_ID)
+
+GROUP BY 1,2,3,4,5,6,7,8,9
+;
