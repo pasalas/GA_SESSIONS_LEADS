@@ -199,7 +199,7 @@ FROM ga_sessions
 
 -- JOIN CON ITEMS + CATEGORIAS
 LEFT JOIN ITEMS AS B
-ON (SELECT value FROM hits.customDimensions WHERE index= 49) /*SITE_ID_ITEM_ID*/ = CONCAT(B.SIT_SITE_ID,B.ITE_ITEM_ID)
+ON (SELECT MAX(value) FROM hits.customDimensions WHERE index= 49) /*SITE_ID_ITEM_ID*/ = CONCAT(B.SIT_SITE_ID,B.ITE_ITEM_ID)
 
 WHERE ((( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT','REAL_ESTATE','SERVICES')) AND upper(hits.eventInfo.eventAction) in ('CALL','CONTACT','CONTACT_WHATSAPP','QUOTATION'))
 
