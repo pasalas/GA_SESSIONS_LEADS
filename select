@@ -4,7 +4,7 @@ WITH ITEMS AS
   SELECT
       A.SIT_SITE_ID
     , A.ITE_ITEM_ID
-    , A.ITE_CNS_CONCESIONARIO
+    , COALESCE(A.ITE_CNS_CONCESIONARIO,0) AS ITE_CNS_CONCESIONARIO
     , CAT.CAT_CATEG_NAME_L1
     , CAT.CAT_CATEG_NAME_L2
     , CAT.CAT_CATEG_NAME_L3
@@ -119,6 +119,10 @@ SELECT
   , FORMAT_DATE("%E4Y",PARSE_DATE('%Y%m%d',ga_sessions.date)) as Year
   , FORMAT_DATE("%m",PARSE_DATE('%Y%m%d',ga_sessions.date)) as Mes
 
+  , (CASE WHEN ITE_CNS_CONCESIONARIO = 1 THEN 'Concesionario'
+          WHEN ITE_CNS_CONCESIONARIO = 2 THEN 'Inmobiliaria'
+          ELSE 'FSBO' END) AS DEALER_TYPE_GROUP_DESC
+
   , (CASE WHEN CAT_CATEG_NAME_L4 IN ('Desarrollos Inmobiliarios','Emprendimientos','Lançamentos','Proyectos') THEN 'Desarrollos'
           WHEN CAT_CATEG_NAME_L3 IN ('Arriendo Temporal','Temporada','Alquiler Temporal','Alquiler Temporada','Alquiler Temporario','Alquiler Vacacional','Renta Vacacional') THEN 'Alquiler temporal'
           WHEN CAT_CATEG_NAME_L3 IN ('Venta','Venda') THEN 'Venta'
@@ -142,9 +146,9 @@ SELECT
           WHEN ga_sessions.dataset_id = 79571586 THEN 'MLM'
           WHEN ga_sessions.dataset_id = 108964616 THEN 'M3' END) AS Cuenta
 
-  , (CASE WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT') THEN 'MOTORS'
-          WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('REAL_ESTATE') THEN 'REAL ESTATE'
-          WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('SERVICES') THEN 'SERVICES' END) AS VERTICAL
+  , (CASE WHEN ( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT') THEN 'MOTORS'
+          WHEN ( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('REAL_ESTATE') THEN 'REAL ESTATE'
+          WHEN ( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('SERVICES') THEN 'SERVICES' END) AS VERTICAL
 
   , (CASE WHEN (ga_sessions.dataset_id = 79572943 and geoNetwork.region = 'State of Sao Paulo') THEN 'SP'
           ELSE 'REST' END) AS Region
@@ -201,8 +205,8 @@ FROM ga_sessions
 LEFT JOIN ITEMS AS B
 ON (SELECT MAX(value) FROM hits.customDimensions WHERE index= 49) /*SITE_ID_ITEM_ID*/ = CONCAT(B.SIT_SITE_ID,B.ITE_ITEM_ID)
 
-WHERE ((( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT','REAL_ESTATE','SERVICES')) AND upper(hits.eventInfo.eventAction) in ('CALL','CONTACT','CONTACT_WHATSAPP','QUOTATION'))
+WHERE ((( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT','REAL_ESTATE','SERVICES')) AND upper(hits.eventInfo.eventAction) in ('CALL','CONTACT','CONTACT_WHATSAPP','QUOTATION'))
 
-GROUP BY 1,2,3,4,5,6,7,8,9
-ORDER BY 1,2,3,4,5,6,7,8,9
+GROUP BY 1,2,3,4,5,6,7,8,9,10
+ORDER BY 1,2,3,4,5,6,7,8,9,10
 ;
