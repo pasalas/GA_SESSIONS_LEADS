@@ -113,7 +113,8 @@ WITH ITEMS AS
     <= (TIMESTAMP('2022-01-02 00:00:00'))))
 )
 
-
+, A AS 
+(
 SELECT
     FORMAT_DATE("%m/%E4Y",PARSE_DATE('%Y%m%d',ga_sessions.date)) as Fecha
   , FORMAT_DATE("%E4Y",PARSE_DATE('%Y%m%d',ga_sessions.date)) as Year
@@ -152,6 +153,9 @@ SELECT
 
   , (CASE WHEN (ga_sessions.dataset_id = 79572943 and geoNetwork.region = 'State of Sao Paulo') THEN 'SP'
           ELSE 'REST' END) AS Region
+
+  , (SELECT (CASE WHEN COALESCE(value,'NONE') IN ('NOT_LOGGED_IN','NONE','') THEN 'NOT_LOGGED_IN' ELSE 'LOGGED_IN' END) FROM hits.customDimensions WHERE index= 103) AS IS_LOGGED
+  , (SELECT (CASE WHEN COALESCE(value,'NONE') IN ('NOT_LOGGED_IN','NONE','') THEN fullVisitorId ELSE value END) FROM hits.customDimensions WHERE index= 103) AS cus_cust_id_buy
 
   , (CASE
       -- EMAIL
@@ -194,7 +198,12 @@ SELECT
           WHEN REGEXP_CONTAINS(upper(trafficSource.medium),'.*AFFILI.*') IS TRUE then 'AFFILIATE'
           ELSE 'OTHER' END) AS MEDIUM
 
-  , COUNT(DISTINCT CASE WHEN (hits.type = 'EVENT') THEN (CONCAT(ga_sessions.id,'|',FORMAT('%05d',hits.hitNumber)))  ELSE NULL END) AS TotalContacts
+-- PARA CREAR CONTACTOS, IS_LOGGED y cus_cust_id_buy
+  , hits.type -- CONTACTOS
+  , hits.hitNumber -- CONTACTOS
+  , ga_sessions.id -- CONTACTOS
+  , fullVisitorId -- cus_cust_id_buy
+
 
 
 
@@ -207,6 +216,27 @@ ON (SELECT MAX(value) FROM hits.customDimensions WHERE index= 49) /*SITE_ID_ITEM
 
 WHERE ((( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT','REAL_ESTATE','SERVICES')) AND upper(hits.eventInfo.eventAction) in ('CALL','CONTACT','CONTACT_WHATSAPP','QUOTATION'))
 
-GROUP BY 1,2,3,4,5,6,7,8,9,10
-ORDER BY 1,2,3,4,5,6,7,8,9,10
+)
+
+SELECT 
+    Fecha
+  , Year
+  , Mes
+  , DEALER_TYPE_GROUP_DESC
+  , Operacion
+  , PAIS
+  , Cuenta
+  , VERTICAL
+  , Region
+  , MEDIUM
+  , (CASE WHEN IS_LOGGED IS NULL THEN 'NOT_LOGGED_IN' ELSE IS_LOGGED END) AS IS_LOGGED
+--   , (CASE WHEN cus_cust_id_buy IS NULL THEN fullVisitorId ELSE cus_cust_id_buy END) AS CUS_CUST_ID_BUY
+
+-- METRICA DE CONTACTOS
+  , COUNT(DISTINCT CASE WHEN (type = 'EVENT') THEN (CONCAT(id,'|',FORMAT('%05d',hitNumber)))  ELSE NULL END) AS TotalContacts
+
+FROM A
+
+GROUP BY 1,2,3,4,5,6,7,8,9,10,11
+ORDER BY 1,2,3,4,5,6,7,8,9,10,11
 ;
